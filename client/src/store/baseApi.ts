@@ -6,5 +6,6 @@ export const api = createApi({
   baseQuery: graphqlRequestBaseQuery({
     url: "http://localhost:4000/graphql",
   }),
+  tagTypes: ["Form", "Response"],
   endpoints: () => ({}),
 });

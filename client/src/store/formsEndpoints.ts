@@ -22,6 +22,7 @@ export const formsApi = api.injectEndpoints({
           }
         `,
       }),
+      providesTags: ["Form"],
     }),
 
     // 2. Получить форму по ID (для заполнения и просмотра ответов)
@@ -63,6 +64,7 @@ export const formsApi = api.injectEndpoints({
         `,
         variables: { formId },
       }),
+      providesTags: ["Response"],
     }),
 
     // 4. Создать новую форму
@@ -89,6 +91,7 @@ export const formsApi = api.injectEndpoints({
         `,
         variables,
       }),
+      invalidatesTags: ["Form"],
     }),
 
     // 5. Отправить ответы пользователя
@@ -106,6 +109,7 @@ export const formsApi = api.injectEndpoints({
         `,
         variables,
       }),
+      invalidatesTags: ["Response"],
     }),
   }),
 });
