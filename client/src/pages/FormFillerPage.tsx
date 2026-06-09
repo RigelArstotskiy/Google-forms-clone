@@ -12,6 +12,7 @@ export default function FormFillerPage() {
     errors,
     updateAnswer,
     updateCheckbox,
+    isCheckboxChecked,
     handleSubmit,
   } = useFormFiller();
 
@@ -93,7 +94,7 @@ export default function FormFillerPage() {
               />
             )}
 
-            {/* Один из вариантов */}
+            {/* Один из вариантов (Радио-кнопки) */}
             {question.type === "MULTIPLE_CHOICE" && (
               <div className="flex flex-col gap-3">
                 {question.options?.map((option) => (
@@ -126,13 +127,14 @@ export default function FormFillerPage() {
               </div>
             )}
 
-            {/* Несколько вариантов */}
+            {/* Несколько вариантов (Чекбоксы) */}
             {question.type === "CHECKBOX" && (
               <div className="flex flex-col gap-3">
                 {question.options?.map((option) => {
-                  const isChecked = answers[question.id]
-                    ?.split(",")
-                    .includes(option ?? "");
+                  const isChecked = isCheckboxChecked(
+                    question.id,
+                    option ?? "",
+                  );
                   return (
                     <label
                       key={option}
