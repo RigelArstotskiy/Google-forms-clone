@@ -22,11 +22,13 @@ A simplified Google Forms clone for creating forms, filling them out, and viewin
 
 ## Project Structure
 
+```
 google-forms-clone/
-├── client/ # React application
-├── server/ # GraphQL server
+├── client/            # React application
+├── server/            # GraphQL server
 └── packages/
-└── shared/ # Shared TypeScript types
+    └── shared/        # Shared TypeScript types
+```
 
 ---
 
