@@ -12,7 +12,9 @@ export function useFormFiller() {
   const { data, isLoading, isError } = useGetFormQuery(id!);
   const [submitResponse, { isLoading: isSubmitting, isSuccess }] =
     useSubmitResponseMutation();
+
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (isSuccess) {
@@ -22,6 +24,8 @@ export function useFormFiller() {
   }, [isSuccess, navigate]);
 
   const updateAnswer = (questionId: string, value: string) => {
+    // сбрасываем ошибку когда пользователь начал отвечать
+    setErrors((prev) => ({ ...prev, [questionId]: "" }));
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
@@ -30,6 +34,7 @@ export function useFormFiller() {
     option: string,
     checked: boolean,
   ) => {
+    setErrors((prev) => ({ ...prev, [questionId]: "" }));
     setAnswers((prev) => {
       const current = prev[questionId] ? prev[questionId].split(",") : [];
       const updated = checked
@@ -39,11 +44,32 @@ export function useFormFiller() {
     });
   };
 
+  // проверяем что все вопросы заполнены
+  const validate = (): boolean => {
+    if (!data?.form) return false;
+
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    data.form.questions.forEach((question) => {
+      const answer = answers[question.id];
+      if (!answer || !answer.trim()) {
+        newErrors[question.id] = "Пожалуйста, ответьте на вопрос";
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = async () => {
-    if (!id) return;
+    if (!id || !validate()) return;
+
     const formattedAnswers: AnswerInput[] = Object.entries(answers).map(
       ([questionId, value]) => ({ questionId, value }),
     );
+
     await submitResponse({ formId: id, answers: formattedAnswers });
   };
 
@@ -54,6 +80,7 @@ export function useFormFiller() {
     isSubmitting,
     isSuccess,
     answers,
+    errors,
     updateAnswer,
     updateCheckbox,
     handleSubmit,

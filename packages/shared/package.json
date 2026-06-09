@@ -1,0 +1,17 @@
+{
+  "name": "@forms/shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@forms/shared": "*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

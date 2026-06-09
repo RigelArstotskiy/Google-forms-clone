@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { forms, responses } from "../store";
-import { Form, Response, Question } from "@forms/shared";
+import { Form, FormResponse, Question } from "@forms/shared";
 
 export const resolvers = {
   Query: {
@@ -62,14 +62,14 @@ export const resolvers = {
         formId: string;
         answers: Array<{ questionId: string; value: string }>;
       },
-    ): Response => {
+    ): FormResponse => {
       const form = forms.find((f) => f.id === formId);
 
       if (!form) {
         throw new Error(`Форма с id ${formId} не найдена`);
       }
 
-      const newResponse: Response = {
+      const newResponse: FormResponse = {
         id: crypto.randomUUID(),
         formId,
         answers,

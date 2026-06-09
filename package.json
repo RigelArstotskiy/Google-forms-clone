@@ -1,0 +1,43 @@
+{
+  "name": "google-formes-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w server && npm run build -w client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RigelArstotskiy/Google-forms-clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RigelArstotskiy/Google-forms-clone/issues"
+  },
+  "homepage": "https://github.com/RigelArstotskiy/Google-forms-clone#readme",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^7.1.2",
+    "@graphql-codegen/typescript": "^6.0.2",
+    "@graphql-codegen/typescript-operations": "^6.0.3",
+    "@graphql-codegen/typescript-rtk-query": "^4.0.1",
+    "concurrently": "^10.0.3"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.12.0",
+    "crypto": "^1.0.1",
+    "graphql": "^16.14.1",
+    "react-redux": "^9.3.0",
+    "react-router-dom": "^7.17.0"
+  }
+}

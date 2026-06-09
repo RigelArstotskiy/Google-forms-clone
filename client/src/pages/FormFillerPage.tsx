@@ -9,6 +9,7 @@ export default function FormFillerPage() {
     isSubmitting,
     isSuccess,
     answers,
+    errors,
     updateAnswer,
     updateCheckbox,
     handleSubmit,
@@ -57,27 +58,35 @@ export default function FormFillerPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Шапка формы */}
       <div className="bg-white rounded-xl border-t-4 border-t-violet-600 border border-slate-200 p-6 mb-4">
         <h1 className="text-2xl font-medium text-slate-800">{form.title}</h1>
         {form.description && (
           <p className="text-slate-500 mt-2">{form.description}</p>
         )}
+        <p className="text-xs text-red-500 mt-3">* Все вопросы обязательны</p>
       </div>
 
-      {/* Вопросы */}
       <div className="flex flex-col gap-4 mb-6">
         {form.questions.map((question) => (
           <div
             key={question.id}
-            className="bg-white rounded-xl border border-slate-200 p-6"
+            className={`bg-white rounded-xl border p-6 transition-colors ${
+              errors[question.id] ? "border-red-300" : "border-slate-200"
+            }`}
           >
-            <p className="text-slate-800 font-medium mb-4">{question.text}</p>
+            <p className="text-slate-800 font-medium mb-4">
+              {question.text}
+              <span className="text-red-400 ml-1">*</span>
+            </p>
 
             {/* Текстовый ответ */}
             {question.type === "TEXT" && (
               <input
-                className="w-full border-b border-slate-300 focus:border-violet-500 focus:outline-none pb-1 text-slate-700 placeholder-slate-300 transition-colors"
+                className={`w-full border-b focus:outline-none pb-1 text-slate-700 placeholder-slate-300 transition-colors ${
+                  errors[question.id]
+                    ? "border-red-400"
+                    : "border-slate-300 focus:border-violet-500"
+                }`}
                 placeholder="Ваш ответ"
                 value={answers[question.id] ?? ""}
                 onChange={(e) => updateAnswer(question.id, e.target.value)}
@@ -176,16 +185,24 @@ export default function FormFillerPage() {
             {question.type === "DATE" && (
               <input
                 type="date"
-                className="border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:border-violet-400 transition-colors"
+                className={`border rounded-lg px-3 py-2 text-slate-700 focus:outline-none transition-colors ${
+                  errors[question.id]
+                    ? "border-red-400"
+                    : "border-slate-200 focus:border-violet-400"
+                }`}
                 value={answers[question.id] ?? ""}
                 onChange={(e) => updateAnswer(question.id, e.target.value)}
               />
+            )}
+
+            {/* ошибка вопроса */}
+            {errors[question.id] && (
+              <p className="text-red-500 text-xs mt-2">{errors[question.id]}</p>
             )}
           </div>
         ))}
       </div>
 
-      {/* Кнопка отправки */}
       <div className="flex justify-between items-center">
         <Link
           to="/"

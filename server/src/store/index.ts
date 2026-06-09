@@ -1,4 +1,4 @@
-import { Form, Response } from "@forms/shared";
+import { Form, FormResponse } from "@forms/shared";
 
 export const forms: Form[] = [];
-export const responses: Response[] = [];
+export const responses: FormResponse[] = [];

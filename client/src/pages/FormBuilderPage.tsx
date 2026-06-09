@@ -17,6 +17,8 @@ export default function FormBuilderPage() {
     setDescription,
     questions,
     isLoading,
+    titleError,
+    questionErrors,
     addQuestion,
     updateQuestion,
     removeQuestion,
@@ -38,16 +40,26 @@ export default function FormBuilderPage() {
         <h1 className="text-2xl font-medium text-slate-800">Новая форма</h1>
       </div>
 
-      {/* Заголовок и описание формы */}
+      {/* Заголовок и описание */}
       <div className="bg-white rounded-xl border-t-4 border-t-violet-600 border border-slate-200 p-6 mb-4">
         <input
-          className="w-full text-2xl font-medium text-slate-800 border-b border-slate-200 pb-2 mb-3 focus:outline-none focus:border-violet-400 placeholder-slate-300"
+          className={`w-full text-2xl font-medium text-slate-800 border-b pb-2 mb-1 focus:outline-none placeholder-slate-300 ${
+            titleError
+              ? "border-red-400 focus:border-red-400"
+              : "border-slate-200 focus:border-violet-400"
+          }`}
           placeholder="Название формы"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
         />
+        {/* ошибка заголовка */}
+        {titleError && (
+          <p className="text-red-500 text-xs mb-2">{titleError}</p>
+        )}
         <input
-          className="w-full text-sm text-slate-600 focus:outline-none placeholder-slate-300"
+          className="w-full text-sm text-slate-600 focus:outline-none placeholder-slate-300 mt-2"
           placeholder="Описание формы"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -59,11 +71,19 @@ export default function FormBuilderPage() {
         {questions.map((question, qi) => (
           <div
             key={qi}
-            className="bg-white rounded-xl border border-slate-200 p-6 hover:border-violet-300 transition-colors"
+            className={`bg-white rounded-xl border p-6 transition-colors ${
+              questionErrors[qi]
+                ? "border-red-300"
+                : "border-slate-200 hover:border-violet-300"
+            }`}
           >
             <div className="flex gap-3 mb-4">
               <input
-                className="flex-1 text-slate-800 border-b border-slate-200 pb-1 focus:outline-none focus:border-violet-400 placeholder-slate-300"
+                className={`flex-1 text-slate-800 border-b pb-1 focus:outline-none placeholder-slate-300 ${
+                  questionErrors[qi]
+                    ? "border-red-400"
+                    : "border-slate-200 focus:border-violet-400"
+                }`}
                 placeholder="Текст вопроса"
                 value={question.text}
                 onChange={(e) => updateQuestion(qi, e.target.value)}
@@ -78,6 +98,11 @@ export default function FormBuilderPage() {
                 ×
               </button>
             </div>
+
+            {/* ошибка вопроса */}
+            {questionErrors[qi] && (
+              <p className="text-red-500 text-xs mb-3">{questionErrors[qi]}</p>
+            )}
 
             {/* Варианты ответов */}
             {(question.type === "MULTIPLE_CHOICE" ||
@@ -111,7 +136,6 @@ export default function FormBuilderPage() {
               </div>
             )}
 
-            {/* Превью поля для текста и даты */}
             {question.type === "TEXT" && (
               <div className="ml-2 border-b border-slate-200 pb-1">
                 <span className="text-sm text-slate-300">Краткий ответ</span>
@@ -143,11 +167,10 @@ export default function FormBuilderPage() {
         </div>
       </div>
 
-      {/* Кнопка сохранения */}
       <div className="flex justify-end">
         <button
           onClick={handleSubmit}
-          disabled={isLoading || !title.trim()}
+          disabled={isLoading}
           className="bg-violet-600 hover:bg-violet-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-full font-medium transition-colors"
         >
           {isLoading ? "Сохранение..." : "Сохранить форму"}
